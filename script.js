@@ -13,13 +13,11 @@ function loginAdmin() {
 
   if (password === "admin123") {
 
-    document
-      .getElementById("loginPage")
-      .classList.add("hidden");
+    document.getElementById("loginPage").style.display = "none";
 
-    document
-      .getElementById("adminDashboard")
-      .classList.remove("hidden");
+    document.getElementById("adminDashboard").style.display = "flex";
+
+    showSection("addSection");
   }
   else {
 
@@ -29,37 +27,25 @@ function loginAdmin() {
 
 function openUserDashboard() {
 
-  document
-    .getElementById("loginPage")
-    .classList.add("hidden");
+  document.getElementById("loginPage").style.display = "none";
 
-  document
-    .getElementById("userDashboard")
-    .classList.remove("hidden");
+  document.getElementById("userDashboard").style.display = "block";
 
   displayEmployees();
 }
 
 function backToLogin() {
 
-  document
-    .getElementById("userDashboard")
-    .classList.add("hidden");
+  document.getElementById("userDashboard").style.display = "none";
 
-  document
-    .getElementById("loginPage")
-    .classList.remove("hidden");
+  document.getElementById("loginPage").style.display = "flex";
 }
 
 function logoutAdmin() {
 
-  document
-    .getElementById("adminDashboard")
-    .classList.add("hidden");
+  document.getElementById("adminDashboard").style.display = "none";
 
-  document
-    .getElementById("loginPage")
-    .classList.remove("hidden");
+  document.getElementById("loginPage").style.display = "flex";
 }
 
 /* ======================
@@ -73,12 +59,10 @@ function showSection(sectionId) {
 
   sections.forEach(section => {
 
-    section.classList.add("hidden");
+    section.style.display = "none";
   });
 
-  document
-    .getElementById(sectionId)
-    .classList.remove("hidden");
+  document.getElementById(sectionId).style.display = "block";
 }
 
 /* ======================
@@ -111,18 +95,21 @@ function calculateSalary(hours, rate) {
 function getProductivity(hours) {
 
   if (hours >= 60) {
+
     return {
       text: "Very High",
       className: "veryhigh"
     };
   }
   else if (hours >= 40) {
+
     return {
       text: "High",
       className: "high"
     };
   }
   else {
+
     return {
       text: "Normal",
       className: "normal"
@@ -191,16 +178,20 @@ function displayEmployees() {
   const userList =
     document.getElementById("userEmployeeList");
 
-  adminList.innerHTML = "";
+  if (adminList) {
+    adminList.innerHTML = "";
+  }
 
-  userList.innerHTML = "";
+  if (userList) {
+    userList.innerHTML = "";
+  }
 
   employees.forEach((emp, index) => {
 
     const productivity =
       getProductivity(emp.hours);
 
-    const card = `
+    const userCard = `
       <div class="employee-card">
 
         <h3>${emp.name}</h3>
@@ -220,9 +211,7 @@ function displayEmployees() {
       </div>
     `;
 
-    userList.innerHTML += card;
-
-    adminList.innerHTML += `
+    const adminCard = `
       <div class="employee-card">
 
         <h3>${emp.name}</h3>
@@ -237,7 +226,7 @@ function displayEmployees() {
 
         <p><strong>Salary:</strong> ${emp.salary.toFixed(2)}</p>
 
-        <button 
+        <button
           class="delete-btn"
           onclick="deleteEmployee(${index})">
           Delete Employee
@@ -245,6 +234,14 @@ function displayEmployees() {
 
       </div>
     `;
+
+    if (userList) {
+      userList.innerHTML += userCard;
+    }
+
+    if (adminList) {
+      adminList.innerHTML += adminCard;
+    }
   });
 }
 
@@ -302,11 +299,11 @@ function updateStatistics() {
 
   if (employees.length === 0) {
 
-    document.getElementById("highestSalary").innerText = 0;
+    document.getElementById("highestSalary").innerText = "0";
 
-    document.getElementById("lowestSalary").innerText = 0;
+    document.getElementById("lowestSalary").innerText = "0";
 
-    document.getElementById("averageSalary").innerText = 0;
+    document.getElementById("averageSalary").innerText = "0";
 
     return;
   }
