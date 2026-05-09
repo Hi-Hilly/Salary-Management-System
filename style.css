@@ -1,85 +1,261 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  margin: 0;
-  padding: 20px;
+const TAX = 0.05;
+
+const ADMIN_PASSWORD = "adminftuisthub";
+
+let employees = [];
+
+// =========================
+// DASHBOARD MODE
+// =========================
+
+function showUserDashboard() {
+
+  document.getElementById("userDashboard").style.display = "block";
+
+  document.getElementById("adminDashboard").style.display = "none";
 }
 
-.container {
-  width: 90%;
-  max-width: 1000px;
-  margin: auto;
+function adminLogin() {
+
+  const password = prompt("Enter Admin Password");
+
+  if (password === ADMIN_PASSWORD) {
+
+    document.getElementById("adminDashboard").style.display = "block";
+
+    document.getElementById("userDashboard").style.display = "none";
+  }
+  else {
+    alert("Wrong Password");
+  }
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
+// =========================
+// CALCULATE SALARY
+// =========================
+
+function calculateSalary(hours, rate) {
+
+  let overtime = 0;
+
+  if (hours > 40) {
+    overtime = (hours - 40) * (rate * 1.5);
+  }
+
+  let salary = (hours * rate) + overtime;
+
+  salary = salary - (salary * TAX);
+
+  return salary;
 }
 
-.mode-box {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+// =========================
+// PRODUCTIVITY
+// =========================
+
+function getProductivity(hours) {
+
+  if (hours >= 60) {
+    return {
+      text: "Very High",
+      className: "productivity-veryhigh"
+    };
+  }
+  else if (hours >= 40) {
+    return {
+      text: "High",
+      className: "productivity-high"
+    };
+  }
+  else {
+    return {
+      text: "Normal",
+      className: "productivity-normal"
+    };
+  }
 }
 
-.form-box,
-.search-box,
-.stats-box {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+// =========================
+// ADD EMPLOYEE
+// =========================
+
+function addEmployee() {
+
+  const id = document.getElementById("id").value;
+
+  const name = document.getElementById("name").value;
+
+  const hours = parseInt(document.getElementById("hours").value);
+
+  const rate = parseFloat(document.getElementById("rate").value);
+
+  const role = document.getElementById("role").value;
+
+  if (!id || !name || !hours || !rate) {
+    alert("Please Fill All Fields");
+    return;
+  }
+
+  const salary = calculateSalary(hours, rate);
+
+  const employee = {
+    id,
+    name,
+    hours,
+    rate,
+    salary,
+    role
+  };
+
+  employees.push(employee);
+
+  displayEmployees();
+
+  clearForm();
+
+  alert("Employee Added Successfully");
 }
 
-input,
-select,
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  box-sizing: border-box;
+// =========================
+// DISPLAY EMPLOYEE
+// =========================
+
+function displayEmployees() {
+
+  const employeeList = document.getElementById("employeeList");
+
+  employeeList.innerHTML = "";
+
+  employees.forEach((emp, index) => {
+
+    const productivity = getProductivity(emp.hours);
+
+    employeeList.innerHTML += `
+    
+      <div class="employee-card">
+
+        <h3>Employee ${index + 1}</h3>
+
+        <p><strong>ID:</strong> ${emp.id}</p>
+
+        <p><strong>Name:</strong> ${emp.name}</p>
+
+        <p><strong>Hours:</strong> ${emp.hours}</p>
+
+        <p><strong>Rate:</strong> ${emp.rate}</p>
+
+        <p><strong>Salary:</strong> ${emp.salary.toFixed(2)}</p>
+
+        <p><strong>Role:</strong> ${emp.role}</p>
+
+        <p class="${productivity.className}">
+          Productivity: ${productivity.text}
+        </p>
+
+      </div>
+    `;
+  });
 }
 
-button {
-  background: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
+// =========================
+// SEARCH EMPLOYEE
+// =========================
+
+function searchEmployee() {
+
+  const searchId = document.getElementById("searchId").value;
+
+  const employee = employees.find(emp => emp.id == searchId);
+
+  const result = document.getElementById("searchResult");
+
+  if (employee) {
+
+    result.innerHTML = `
+      <div class="employee-card">
+
+        <h3>Employee Found</h3>
+
+        <p><strong>Name:</strong> ${employee.name}</p>
+
+        <p><strong>Salary:</strong> ${employee.salary.toFixed(2)}</p>
+
+        <p><strong>Role:</strong> ${employee.role}</p>
+
+      </div>
+    `;
+  }
+  else {
+
+    result.innerHTML = `
+      <div class="employee-card">
+        Employee Not Found
+      </div>
+    `;
+  }
 }
 
-button:hover {
-  background: #0056b3;
+// =========================
+// STATISTICS
+// =========================
+
+function showStatistics() {
+
+  if (employees.length === 0) {
+
+    alert("No Data Available");
+
+    return;
+  }
+
+  let highest = employees[0].salary;
+
+  let lowest = employees[0].salary;
+
+  let total = 0;
+
+  employees.forEach(emp => {
+
+    if (emp.salary > highest) {
+      highest = emp.salary;
+    }
+
+    if (emp.salary < lowest) {
+      lowest = emp.salary;
+    }
+
+    total += emp.salary;
+  });
+
+  const average = total / employees.length;
+
+  document.getElementById("statisticsResult").innerHTML = `
+  
+    <p>Highest Salary : ${highest.toFixed(2)}</p>
+
+    <p>Lowest Salary : ${lowest.toFixed(2)}</p>
+
+    <p>Average Salary : ${average.toFixed(2)}</p>
+  `;
 }
 
-.employee-card {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 15px;
+// =========================
+// CLEAR FORM
+// =========================
+
+function clearForm() {
+
+  document.getElementById("id").value = "";
+
+  document.getElementById("name").value = "";
+
+  document.getElementById("hours").value = "";
+
+  document.getElementById("rate").value = "";
 }
 
-.employee-card h3 {
-  margin-top: 0;
-}
+// =========================
+// INITIAL DISPLAY
+// =========================
 
-.productivity-normal {
-  color: orange;
-  font-weight: bold;
-}
-
-.productivity-high {
-  color: green;
-  font-weight: bold;
-}
-
-.productivity-veryhigh {
-  color: darkgreen;
-  font-weight: bold;
-}
-
-#searchResult,
-#statisticsResult {
-  margin-top: 15px;
-  font-weight: bold;
-}
+displayEmployees();
