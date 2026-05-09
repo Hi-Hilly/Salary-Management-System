@@ -12,8 +12,8 @@
 
     <h1>Salary Management System</h1>
 
-    <!-- MODE BUTTON -->
-    <div class="mode-box">
+    <!-- NAVIGATION -->
+    <div class="top-bar">
       <button onclick="showUserDashboard()">User Dashboard</button>
       <button onclick="adminLogin()">Admin Dashboard</button>
     </div>
@@ -28,16 +28,12 @@
         <button onclick="searchEmployee()">Search Employee</button>
       </div>
 
-      <div id="searchResult"></div>
-
-      <h2>Employee List</h2>
-
       <div id="employeeList"></div>
 
     </div>
 
     <!-- ADMIN DASHBOARD -->
-    <div id="adminDashboard" style="display: none;">
+    <div id="adminDashboard" class="hidden">
 
       <h2>Admin Dashboard</h2>
 
@@ -61,15 +57,20 @@
 
       </div>
 
-      <div class="stats-box">
+      <div class="stats">
         <button onclick="showStatistics()">Show Statistics</button>
         <div id="statisticsResult"></div>
       </div>
+
+      <h3>Manage Employees</h3>
+
+      <div id="adminEmployeeList"></div>
 
     </div>
 
   </div>
 
   <script src="script.js"></script>
+
 </body>
 </html>
