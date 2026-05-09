@@ -1,73 +1,127 @@
-const TAX = 0.05;
+import { initializeApp }
 
-let employees = [];
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-/* ======================
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  onValue,
+  remove
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+/* =========================
+   FIREBASE CONFIG
+========================= */
+
+const firebaseConfig = {
+
+  apiKey: "YOUR_API_KEY",
+
+  authDomain: "YOUR_AUTH_DOMAIN",
+
+  databaseURL: "YOUR_DATABASE_URL",
+
+  projectId: "YOUR_PROJECT_ID",
+
+  storageBucket: "YOUR_STORAGE_BUCKET",
+
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+
+  appId: "YOUR_APP_ID"
+};
+
+/* =========================
+   FIREBASE INIT
+========================= */
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
+
+/* =========================
    LOGIN SYSTEM
-====================== */
+========================= */
 
-function loginAdmin() {
+window.loginAdmin = function () {
 
   const password =
     document.getElementById("adminPassword").value;
 
   if (password === "admin123") {
 
-    document.getElementById("loginPage").style.display = "none";
+    document
+      .getElementById("loginPage")
+      .classList.add("hidden");
 
-    document.getElementById("adminDashboard").style.display = "flex";
-
-    showSection("addSection");
+    document
+      .getElementById("adminDashboard")
+      .classList.remove("hidden");
   }
   else {
 
     alert("Wrong Password");
   }
-}
+};
 
-function openUserDashboard() {
+window.openUserDashboard = function () {
 
-  document.getElementById("loginPage").style.display = "none";
+  document
+    .getElementById("loginPage")
+    .classList.add("hidden");
 
-  document.getElementById("userDashboard").style.display = "block";
+  document
+    .getElementById("userDashboard")
+    .classList.remove("hidden");
+};
 
-  displayEmployees();
-}
+window.backToLogin = function () {
 
-function backToLogin() {
+  document
+    .getElementById("userDashboard")
+    .classList.add("hidden");
 
-  document.getElementById("userDashboard").style.display = "none";
+  document
+    .getElementById("loginPage")
+    .classList.remove("hidden");
+};
 
-  document.getElementById("loginPage").style.display = "flex";
-}
+window.logoutAdmin = function () {
 
-function logoutAdmin() {
+  document
+    .getElementById("adminDashboard")
+    .classList.add("hidden");
 
-  document.getElementById("adminDashboard").style.display = "none";
+  document
+    .getElementById("loginPage")
+    .classList.remove("hidden");
+};
 
-  document.getElementById("loginPage").style.display = "flex";
-}
-
-/* ======================
+/* =========================
    SECTION CONTROL
-====================== */
+========================= */
 
-function showSection(sectionId) {
+window.showSection = function (sectionId) {
 
   const sections =
     document.querySelectorAll(".dashboard-section");
 
   sections.forEach(section => {
 
-    section.style.display = "none";
+    section.classList.add("hidden");
   });
 
-  document.getElementById(sectionId).style.display = "block";
-}
+  document
+    .getElementById(sectionId)
+    .classList.remove("hidden");
+};
 
-/* ======================
-   SALARY
-====================== */
+/* =========================
+   SALARY CALCULATION
+========================= */
 
 function calculateSalary(hours, rate) {
 
@@ -83,14 +137,14 @@ function calculateSalary(hours, rate) {
     (hours * rate) + overtime;
 
   salary =
-    salary - (salary * TAX);
+    salary - (salary * 0.05);
 
   return salary;
 }
 
-/* ======================
+/* =========================
    PRODUCTIVITY
-====================== */
+========================= */
 
 function getProductivity(hours) {
 
@@ -117,11 +171,11 @@ function getProductivity(hours) {
   }
 }
 
-/* ======================
+/* =========================
    ADD EMPLOYEE
-====================== */
+========================= */
 
-function addEmployee() {
+window.addEmployee = async function () {
 
   const id =
     document.getElementById("id").value;
@@ -148,7 +202,11 @@ function addEmployee() {
   const salary =
     calculateSalary(hours, rate);
 
-  employees.push({
+  const employeeRef =
+    push(ref(db, "employees"));
+
+  await set(employeeRef, {
+
     id,
     name,
     hours,
@@ -157,178 +215,198 @@ function addEmployee() {
     salary
   });
 
-  displayEmployees();
-
-  updateStatistics();
+  alert("Employee Added Successfully");
 
   clearForm();
+};
 
-  alert("Employee Added Successfully");
-}
+/* =========================
+   LOAD EMPLOYEES
+========================= */
 
-/* ======================
-   DISPLAY EMPLOYEES
-====================== */
+function loadEmployees() {
 
-function displayEmployees() {
+  const employeesRef =
+    ref(db, "employees");
 
-  const adminList =
-    document.getElementById("adminEmployeeList");
+  onValue(employeesRef, (snapshot) => {
 
-  const userList =
-    document.getElementById("userEmployeeList");
+    const data = snapshot.val();
 
-  if (adminList) {
-    adminList.innerHTML = "";
-  }
+    const adminList =
+      document.getElementById("adminEmployeeList");
 
-  if (userList) {
-    userList.innerHTML = "";
-  }
-
-  employees.forEach((emp, index) => {
-
-    const productivity =
-      getProductivity(emp.hours);
-
-    const userCard = `
-      <div class="employee-card">
-
-        <h3>${emp.name}</h3>
-
-        <p><strong>ID:</strong> ${emp.id}</p>
-
-        <p><strong>Role:</strong> ${emp.role}</p>
-
-        <p><strong>Hours:</strong> ${emp.hours}</p>
-
-        <p><strong>Salary:</strong> ${emp.salary.toFixed(2)}</p>
-
-        <p class="${productivity.className}">
-          Productivity: ${productivity.text}
-        </p>
-
-      </div>
-    `;
-
-    const adminCard = `
-      <div class="employee-card">
-
-        <h3>${emp.name}</h3>
-
-        <p><strong>ID:</strong> ${emp.id}</p>
-
-        <p><strong>Role:</strong> ${emp.role}</p>
-
-        <p><strong>Hours:</strong> ${emp.hours}</p>
-
-        <p><strong>Rate:</strong> ${emp.rate}</p>
-
-        <p><strong>Salary:</strong> ${emp.salary.toFixed(2)}</p>
-
-        <button
-          class="delete-btn"
-          onclick="deleteEmployee(${index})">
-          Delete Employee
-        </button>
-
-      </div>
-    `;
-
-    if (userList) {
-      userList.innerHTML += userCard;
-    }
+    const userList =
+      document.getElementById("userEmployeeList");
 
     if (adminList) {
-      adminList.innerHTML += adminCard;
+      adminList.innerHTML = "";
     }
+
+    if (userList) {
+      userList.innerHTML = "";
+    }
+
+    let salaries = [];
+
+    for (let key in data) {
+
+      const emp = data[key];
+
+      salaries.push(emp.salary);
+
+      const productivity =
+        getProductivity(emp.hours);
+
+      const userCard = `
+        <div class="employee-card">
+
+          <h3>${emp.name}</h3>
+
+          <p><strong>ID:</strong> ${emp.id}</p>
+
+          <p><strong>Role:</strong> ${emp.role}</p>
+
+          <p><strong>Salary:</strong>
+          ${emp.salary.toFixed(2)}</p>
+
+          <p class="${productivity.className}">
+            Productivity:
+            ${productivity.text}
+          </p>
+
+        </div>
+      `;
+
+      const adminCard = `
+        <div class="employee-card">
+
+          <h3>${emp.name}</h3>
+
+          <p><strong>ID:</strong> ${emp.id}</p>
+
+          <p><strong>Role:</strong> ${emp.role}</p>
+
+          <p><strong>Hours:</strong> ${emp.hours}</p>
+
+          <p><strong>Rate:</strong> ${emp.rate}</p>
+
+          <p><strong>Salary:</strong>
+          ${emp.salary.toFixed(2)}</p>
+
+          <button
+            class="delete-btn"
+            onclick="deleteEmployee('${key}')">
+
+            Delete Employee
+
+          </button>
+
+        </div>
+      `;
+
+      if (adminList) {
+        adminList.innerHTML += adminCard;
+      }
+
+      if (userList) {
+        userList.innerHTML += userCard;
+      }
+    }
+
+    updateStatistics(salaries);
   });
 }
 
-/* ======================
+/* =========================
    DELETE EMPLOYEE
-====================== */
+========================= */
 
-function deleteEmployee(index) {
+window.deleteEmployee = async function (key) {
 
   const confirmDelete =
     confirm("Delete employee?");
 
   if (confirmDelete) {
 
-    employees.splice(index, 1);
-
-    displayEmployees();
-
-    updateStatistics();
+    await remove(ref(db, `employees/${key}`));
   }
-}
+};
 
-/* ======================
+/* =========================
    SEARCH EMPLOYEE
-====================== */
+========================= */
 
-function searchEmployee() {
+window.searchEmployee = function () {
 
   const searchId =
     document.getElementById("searchId").value;
 
-  const employee =
-    employees.find(emp => emp.id == searchId);
+  const employeesRef =
+    ref(db, "employees");
 
-  if (employee) {
+  onValue(employeesRef, (snapshot) => {
 
-    alert(
-      `Employee Found\n\n` +
-      `Name: ${employee.name}\n` +
-      `Role: ${employee.role}\n` +
-      `Salary: ${employee.salary.toFixed(2)}`
-    );
-  }
-  else {
+    const data = snapshot.val();
 
-    alert("Employee Not Found");
-  }
-}
+    let found = false;
 
-/* ======================
+    for (let key in data) {
+
+      const emp = data[key];
+
+      if (emp.id == searchId) {
+
+        found = true;
+
+        alert(
+          `Employee Found\n\n` +
+          `Name: ${emp.name}\n` +
+          `Role: ${emp.role}\n` +
+          `Salary: ${emp.salary.toFixed(2)}`
+        );
+      }
+    }
+
+    if (!found) {
+
+      alert("Employee Not Found");
+    }
+
+  }, {
+    onlyOnce: true
+  });
+};
+
+/* =========================
    STATISTICS
-====================== */
+========================= */
 
-function updateStatistics() {
+function updateStatistics(salaries) {
 
-  if (employees.length === 0) {
+  if (salaries.length === 0) {
 
-    document.getElementById("highestSalary").innerText = "0";
+    document.getElementById("highestSalary")
+      .innerText = "0";
 
-    document.getElementById("lowestSalary").innerText = "0";
+    document.getElementById("lowestSalary")
+      .innerText = "0";
 
-    document.getElementById("averageSalary").innerText = "0";
+    document.getElementById("averageSalary")
+      .innerText = "0";
 
     return;
   }
 
-  let highest = employees[0].salary;
+  const highest =
+    Math.max(...salaries);
 
-  let lowest = employees[0].salary;
-
-  let total = 0;
-
-  employees.forEach(emp => {
-
-    if (emp.salary > highest) {
-      highest = emp.salary;
-    }
-
-    if (emp.salary < lowest) {
-      lowest = emp.salary;
-    }
-
-    total += emp.salary;
-  });
+  const lowest =
+    Math.min(...salaries);
 
   const average =
-    total / employees.length;
+    salaries.reduce((a, b) => a + b, 0)
+    / salaries.length;
 
   document.getElementById("highestSalary")
     .innerText = highest.toFixed(2);
@@ -340,9 +418,9 @@ function updateStatistics() {
     .innerText = average.toFixed(2);
 }
 
-/* ======================
+/* =========================
    CLEAR FORM
-====================== */
+========================= */
 
 function clearForm() {
 
@@ -354,3 +432,9 @@ function clearForm() {
 
   document.getElementById("rate").value = "";
 }
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+loadEmployees();
