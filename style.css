@@ -5,221 +5,314 @@
 }
 
 body {
+
   font-family: Arial, sans-serif;
+
   background: #f4f7fc;
 }
 
-/* LOGIN PAGE */
+.hidden {
+  display: none !important;
+}
+
+/* LOGIN */
 
 .login-page {
+
   height: 100vh;
+
   display: flex;
+
   justify-content: center;
+
   align-items: center;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
+
+  background:
+    linear-gradient(
+      135deg,
+      #1e3c72,
+      #2a5298
+    );
 }
 
 .login-box {
+
   background: white;
+
   padding: 40px;
-  width: 350px;
+
   border-radius: 15px;
-  text-align: center;
+
+  width: 350px;
+
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
 
 .login-box h1 {
-  margin-bottom: 25px;
+
+  margin-bottom: 20px;
+
+  text-align: center;
 }
 
-.login-box input {
+.login-box input,
+.login-box button {
+
   width: 100%;
+
   padding: 12px;
-  margin-bottom: 15px;
+
+  margin-top: 10px;
+
+  border-radius: 8px;
+
+  border: 1px solid #ccc;
 }
 
 .login-box button {
-  width: 100%;
-  padding: 12px;
-  border: none;
+
   background: #1e3c72;
+
   color: white;
+
+  border: none;
+
   cursor: pointer;
-  margin-bottom: 10px;
-  border-radius: 8px;
 }
 
-.user-btn {
-  background: #555;
-}
-
-/* HEADER */
+/* USER */
 
 .header {
+
   background: #1e3c72;
+
   color: white;
+
   padding: 20px;
+
   display: flex;
+
   justify-content: space-between;
+
+  align-items: center;
 }
 
-/* USER DASHBOARD */
+.header button {
+
+  padding: 10px 15px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
 
 .content {
+
   padding: 30px;
 }
 
-.search-section {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
+.search-box {
+
+  display: flex;
+
+  gap: 10px;
+
   margin-bottom: 20px;
 }
 
-.search-section input,
-.search-section button {
-  width: 100%;
+.search-box input {
+
+  flex: 1;
+
   padding: 12px;
-  margin-top: 10px;
 }
 
-/* ADMIN DASHBOARD */
+.search-box button {
+
+  padding: 12px 20px;
+}
+
+/* ADMIN */
 
 #adminDashboard {
+
   display: flex;
+
   min-height: 100vh;
 }
 
 .sidebar {
+
   width: 250px;
+
   background: #1e3c72;
-  color: white;
+
   padding: 20px;
 }
 
 .sidebar h2 {
-  margin-bottom: 30px;
+
+  color: white;
+
+  margin-bottom: 20px;
 }
 
 .sidebar button {
+
   width: 100%;
+
   padding: 12px;
+
   margin-bottom: 10px;
+
   border: none;
-  background: #2a5298;
-  color: white;
-  cursor: pointer;
+
   border-radius: 8px;
+
+  cursor: pointer;
 }
 
 .main-content {
+
   flex: 1;
+
   padding: 30px;
 }
 
-.dashboard-section {
-  margin-top: 20px;
-}
+/* FORM */
 
 .form-container {
+
   background: white;
+
   padding: 20px;
-  border-radius: 10px;
+
+  border-radius: 12px;
+
+  margin-top: 20px;
 }
 
 .form-container input,
 .form-container select,
 .form-container button {
+
   width: 100%;
+
   padding: 12px;
+
   margin-top: 10px;
+
+  border-radius: 8px;
+
+  border: 1px solid #ccc;
 }
 
-.form-container button {
-  background: #1e3c72;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-/* EMPLOYEE CARD */
+/* EMPLOYEE */
 
 .employee-grid {
+
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(250px, 1fr));
+
   gap: 20px;
+
   margin-top: 20px;
 }
 
 .employee-card {
+
   background: white;
+
   padding: 20px;
-  border-radius: 10px;
-  border-left: 6px solid #1e3c72;
+
+  border-radius: 12px;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+  border-left: 5px solid #1e3c72;
 }
 
 .employee-card h3 {
-  margin-bottom: 15px;
+
+  margin-bottom: 10px;
 }
 
 .employee-card p {
+
   margin-bottom: 8px;
 }
 
+/* DELETE BUTTON */
+
 .delete-btn {
+
   width: 100%;
+
   padding: 10px;
-  background: red;
-  color: white;
+
+  margin-top: 10px;
+
   border: none;
-  cursor: pointer;
-  margin-top: 15px;
+
   border-radius: 8px;
+
+  background: red;
+
+  color: white;
+
+  cursor: pointer;
 }
 
 /* STATISTICS */
 
 .stats-grid {
+
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+
   gap: 20px;
+
+  margin-top: 20px;
 }
 
 .stat-card {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-}
 
-.stat-card h3 {
-  margin-bottom: 15px;
+  background: white;
+
+  padding: 20px;
+
+  border-radius: 12px;
+
+  text-align: center;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .stat-card p {
-  font-size: 28px;
+
+  margin-top: 10px;
+
+  font-size: 24px;
+
   font-weight: bold;
-  color: #1e3c72;
 }
 
 /* PRODUCTIVITY */
 
-.high {
+.veryhigh {
   color: green;
-  font-weight: bold;
+}
+
+.high {
+  color: orange;
 }
 
 .normal {
-  color: orange;
-  font-weight: bold;
-}
-
-.veryhigh {
-  color: darkgreen;
-  font-weight: bold;
-}
-
-/* HIDDEN */
-
-.hidden {
-  display: none !important;
+  color: gray;
 }
