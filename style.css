@@ -1,0 +1,78 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  width: 90%;
+  max-width: 900px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-box,
+.search-box,
+.stats {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.employee-card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+
+.employee-card h3 {
+  margin-top: 0;
+}
+
+.productivity-high {
+  color: green;
+  font-weight: bold;
+}
+
+.productivity-normal {
+  color: orange;
+  font-weight: bold;
+}
+
+.productivity-veryhigh {
+  color: darkgreen;
+  font-weight: bold;
+}
+
+#statisticsResult {
+  margin-top: 15px;
+  font-weight: bold;
+}
