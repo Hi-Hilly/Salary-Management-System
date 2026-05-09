@@ -3,12 +3,14 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
+
   getDatabase,
   ref,
   push,
   set,
   onValue,
   remove
+
 }
 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -43,7 +45,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 /* =========================
-   LOGIN SYSTEM
+   LOGIN
 ========================= */
 
 window.loginAdmin = function () {
@@ -84,7 +86,7 @@ window.backToLogin = function () {
     .getElementById("userDashboard")
     .classList.add("hidden");
 
-  document
+    document
     .getElementById("loginPage")
     .classList.remove("hidden");
 };
@@ -101,7 +103,7 @@ window.logoutAdmin = function () {
 };
 
 /* =========================
-   SECTION CONTROL
+   SECTION
 ========================= */
 
 window.showSection = function (sectionId) {
@@ -120,7 +122,7 @@ window.showSection = function (sectionId) {
 };
 
 /* =========================
-   SALARY CALCULATION
+   SALARY
 ========================= */
 
 function calculateSalary(hours, rate) {
@@ -247,6 +249,8 @@ function loadEmployees() {
       userList.innerHTML = "";
     }
 
+    if (!data) return;
+
     let salaries = [];
 
     for (let key in data) {
@@ -322,14 +326,17 @@ function loadEmployees() {
    DELETE EMPLOYEE
 ========================= */
 
-window.deleteEmployee = async function (key) {
+window.deleteEmployee =
+async function (key) {
 
   const confirmDelete =
     confirm("Delete employee?");
 
   if (confirmDelete) {
 
-    await remove(ref(db, `employees/${key}`));
+    await remove(
+      ref(db, `employees/${key}`)
+    );
   }
 };
 
