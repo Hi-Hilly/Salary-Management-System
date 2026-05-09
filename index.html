@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salary Management System</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -14,37 +14,61 @@
 
         <h1>Salary Management System</h1>
 
-        <div class="form-box">
-            <input type="number" id="id" placeholder="Employee ID">
-
-            <input type="text" id="name" placeholder="Employee Name">
-
-            <input type="number" id="hours" placeholder="Hours Worked">
-
-            <input type="number" id="rate" placeholder="Hourly Rate">
-
-            <select id="role">
-                <option value="STAFF">Staff</option>
-                <option value="MANAGER">Manager</option>
-                <option value="INTERN">Intern</option>
-            </select>
-
-            <button onclick="addEmployee()">Add Employee</button>
+        <!-- MODE BUTTON -->
+        <div class="mode-box">
+            <button onclick="showUserDashboard()">User Dashboard</button>
+            <button onclick="adminLogin()">Admin Dashboard</button>
         </div>
 
-        <div class="search-box">
-            <input type="number" id="searchId" placeholder="Search Employee ID">
-            <button onclick="searchEmployee()">Search</button>
+        <!-- USER DASHBOARD -->
+        <div id="userDashboard">
+
+            <h2>User Dashboard</h2>
+
+            <div class="search-box">
+                <input type="number" id="searchId" placeholder="Search Employee ID">
+                <button onclick="searchEmployee()">Search Employee</button>
+            </div>
+
+            <div id="searchResult"></div>
+
+            <h2>Employee List</h2>
+
+            <div id="employeeList"></div>
+
         </div>
 
-        <div class="stats">
-            <button onclick="showStatistics()">Show Statistics</button>
-            <div id="statisticsResult"></div>
+        <!-- ADMIN DASHBOARD -->
+        <div id="adminDashboard" style="display: none;">
+
+            <h2>Admin Dashboard</h2>
+
+            <div class="form-box">
+
+                <input type="number" id="id" placeholder="Employee ID">
+
+                <input type="text" id="name" placeholder="Employee Name">
+
+                <input type="number" id="hours" placeholder="Hours Worked">
+
+                <input type="number" id="rate" placeholder="Hourly Rate">
+
+                <select id="role">
+                    <option value="STAFF">Staff</option>
+                    <option value="MANAGER">Manager</option>
+                    <option value="INTERN">Intern</option>
+                </select>
+
+                <button onclick="addEmployee()">Add Employee</button>
+
+            </div>
+
+            <div class="stats-box">
+                <button onclick="showStatistics()">Show Statistics</button>
+                <div id="statisticsResult"></div>
+            </div>
+
         </div>
-
-        <h2>Employee List</h2>
-
-        <div id="employeeList"></div>
 
     </div>
 
