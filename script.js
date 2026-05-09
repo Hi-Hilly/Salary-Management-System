@@ -1,144 +1,143 @@
 const TAX = 0.05;
 
-const ADMIN_PASSWORD = "adminftuisthub";
-
 let employees = [];
 
-// =========================
-// DASHBOARD MODE
-// =========================
+/* =========================
+   DASHBOARD CONTROL
+========================= */
 
 function showUserDashboard() {
 
-    document.getElementById("userDashboard").style.display = "block";
+  document.getElementById("userDashboard").classList.remove("hidden");
 
-    document.getElementById("adminDashboard").style.display = "none";
+  document.getElementById("adminDashboard").classList.add("hidden");
 }
 
 function adminLogin() {
 
-    const password = prompt("Enter Admin Password");
+  const password = prompt("Enter Admin Password");
 
-    if (password === ADMIN_PASSWORD) {
+  if (password === "admin123") {
 
-        document.getElementById("adminDashboard").style.display = "block";
+    document.getElementById("adminDashboard").classList.remove("hidden");
 
-        document.getElementById("userDashboard").style.display = "none";
-    }
-    else {
-        alert("Wrong Password");
-    }
+    document.getElementById("userDashboard").classList.add("hidden");
+  }
+  else {
+    alert("Wrong Password");
+  }
 }
 
-// =========================
-// CALCULATE SALARY
-// =========================
+/* =========================
+   SALARY CALCULATION
+========================= */
 
 function calculateSalary(hours, rate) {
 
-    let overtime = 0;
+  let overtime = 0;
 
-    if (hours > 40) {
-        overtime = (hours - 40) * (rate * 1.5);
-    }
+  if (hours > 40) {
+    overtime = (hours - 40) * (rate * 1.5);
+  }
 
-    let salary = (hours * rate) + overtime;
+  let salary = (hours * rate) + overtime;
 
-    salary = salary - (salary * TAX);
+  salary = salary - (salary * TAX);
 
-    return salary;
+  return salary;
 }
 
-// =========================
-// PRODUCTIVITY
-// =========================
+/* =========================
+   PRODUCTIVITY
+========================= */
 
 function getProductivity(hours) {
 
-    if (hours >= 60) {
-        return {
-            text: "Very High",
-            className: "productivity-veryhigh"
-        };
-    }
-    else if (hours >= 40) {
-        return {
-            text: "High",
-            className: "productivity-high"
-        };
-    }
-    else {
-        return {
-            text: "Normal",
-            className: "productivity-normal"
-        };
-    }
+  if (hours >= 60) {
+    return {
+      text: "Very High",
+      className: "productivity-veryhigh"
+    };
+  }
+  else if (hours >= 40) {
+    return {
+      text: "High",
+      className: "productivity-high"
+    };
+  }
+  else {
+    return {
+      text: "Normal",
+      className: "productivity-normal"
+    };
+  }
 }
 
-// =========================
-// ADD EMPLOYEE
-// =========================
+/* =========================
+   ADD EMPLOYEE
+========================= */
 
 function addEmployee() {
 
-    const id = document.getElementById("id").value;
+  const id = document.getElementById("id").value;
 
-    const name = document.getElementById("name").value;
+  const name = document.getElementById("name").value;
 
-    const hours = parseInt(document.getElementById("hours").value);
+  const hours = parseInt(document.getElementById("hours").value);
 
-    const rate = parseFloat(document.getElementById("rate").value);
+  const rate = parseFloat(document.getElementById("rate").value);
 
-    const role = document.getElementById("role").value;
+  const role = document.getElementById("role").value;
 
-    if (!id || !name || !hours || !rate) {
-        alert("Please Fill All Fields");
-        return;
-    }
+  if (!id || !name || !hours || !rate) {
+    alert("Please fill all fields");
+    return;
+  }
 
-    const salary = calculateSalary(hours, rate);
+  const salary = calculateSalary(hours, rate);
 
-    const employee = {
-        id,
-        name,
-        hours,
-        rate,
-        salary,
-        role
-    };
+  const employee = {
+    id,
+    name,
+    hours,
+    rate,
+    salary,
+    role
+  };
 
-    employees.push(employee);
+  employees.push(employee);
 
-    displayEmployees();
+  displayEmployees();
 
-    clearForm();
+  clearForm();
 
-    alert("Employee Added Successfully");
+  alert("Employee Added Successfully");
 }
 
-// =========================
-// DISPLAY EMPLOYEE
-// =========================
+/* =========================
+   DISPLAY EMPLOYEES
+========================= */
 
 function displayEmployees() {
 
-    const employeeList = document.getElementById("employeeList");
+  const userList = document.getElementById("employeeList");
 
-    employeeList.innerHTML = "";
+  const adminList = document.getElementById("adminEmployeeList");
 
-    employees.forEach((emp, index) => {
+  userList.innerHTML = "";
 
-        const productivity = getProductivity(emp.hours);
+  adminList.innerHTML = "";
 
-        employeeList.innerHTML += `
-    
+  employees.forEach((emp, index) => {
+
+    const productivity = getProductivity(emp.hours);
+
+    const card = `
       <div class="employee-card">
 
-        <h3>Employee ${index + 1}</h3>
+        <h3>${emp.name}</h3>
 
         <p><strong>ID:</strong> ${emp.id}</p>
-
-        <p><strong>Name:</strong> ${emp.name}</p>
 
         <p><strong>Hours:</strong> ${emp.hours}</p>
 
@@ -154,108 +153,134 @@ function displayEmployees() {
 
       </div>
     `;
-    });
+
+    userList.innerHTML += card;
+
+    adminList.innerHTML += `
+      <div class="employee-card">
+
+        <h3>${emp.name}</h3>
+
+        <p><strong>ID:</strong> ${emp.id}</p>
+
+        <p><strong>Hours:</strong> ${emp.hours}</p>
+
+        <p><strong>Rate:</strong> ${emp.rate}</p>
+
+        <p><strong>Salary:</strong> ${emp.salary.toFixed(2)}</p>
+
+        <p><strong>Role:</strong> ${emp.role}</p>
+
+        <p class="${productivity.className}">
+          Productivity: ${productivity.text}
+        </p>
+
+        <button 
+          class="delete-btn"
+          onclick="deleteEmployee(${index})">
+          Delete Employee
+        </button>
+
+      </div>
+    `;
+  });
 }
 
-// =========================
-// SEARCH EMPLOYEE
-// =========================
+/* =========================
+   DELETE EMPLOYEE
+========================= */
+
+function deleteEmployee(index) {
+
+  const confirmDelete = confirm("Delete this employee?");
+
+  if (confirmDelete) {
+
+    employees.splice(index, 1);
+
+    displayEmployees();
+  }
+}
+
+/* =========================
+   SEARCH EMPLOYEE
+========================= */
 
 function searchEmployee() {
 
-    const searchId = document.getElementById("searchId").value;
+  const searchId = document.getElementById("searchId").value;
 
-    const employee = employees.find(emp => emp.id == searchId);
+  const employee = employees.find(emp => emp.id == searchId);
 
-    const result = document.getElementById("searchResult");
+  if (employee) {
 
-    if (employee) {
+    alert(
+      `Employee Found\n\n` +
+      `Name: ${employee.name}\n` +
+      `Salary: ${employee.salary.toFixed(2)}\n` +
+      `Role: ${employee.role}`
+    );
+  }
+  else {
 
-        result.innerHTML = `
-      <div class="employee-card">
-
-        <h3>Employee Found</h3>
-
-        <p><strong>Name:</strong> ${employee.name}</p>
-
-        <p><strong>Salary:</strong> ${employee.salary.toFixed(2)}</p>
-
-        <p><strong>Role:</strong> ${employee.role}</p>
-
-      </div>
-    `;
-    }
-    else {
-
-        result.innerHTML = `
-      <div class="employee-card">
-        Employee Not Found
-      </div>
-    `;
-    }
+    alert("Employee Not Found");
+  }
 }
 
-// =========================
-// STATISTICS
-// =========================
+/* =========================
+   STATISTICS
+========================= */
 
 function showStatistics() {
 
-    if (employees.length === 0) {
+  if (employees.length === 0) {
 
-        alert("No Data Available");
+    alert("No Data Available");
 
-        return;
+    return;
+  }
+
+  let highest = employees[0].salary;
+
+  let lowest = employees[0].salary;
+
+  let total = 0;
+
+  employees.forEach(emp => {
+
+    if (emp.salary > highest) {
+      highest = emp.salary;
     }
 
-    let highest = employees[0].salary;
+    if (emp.salary < lowest) {
+      lowest = emp.salary;
+    }
 
-    let lowest = employees[0].salary;
+    total += emp.salary;
+  });
 
-    let total = 0;
+  const average = total / employees.length;
 
-    employees.forEach(emp => {
+  document.getElementById("statisticsResult").innerHTML = `
+    <p>Highest Salary: ${highest.toFixed(2)}</p>
 
-        if (emp.salary > highest) {
-            highest = emp.salary;
-        }
+    <p>Lowest Salary: ${lowest.toFixed(2)}</p>
 
-        if (emp.salary < lowest) {
-            lowest = emp.salary;
-        }
-
-        total += emp.salary;
-    });
-
-    const average = total / employees.length;
-
-    document.getElementById("statisticsResult").innerHTML = `
-  
-    <p>Highest Salary : ${highest.toFixed(2)}</p>
-
-    <p>Lowest Salary : ${lowest.toFixed(2)}</p>
-
-    <p>Average Salary : ${average.toFixed(2)}</p>
+    <p>Average Salary: ${average.toFixed(2)}</p>
   `;
 }
 
-// =========================
-// CLEAR FORM
-// =========================
+/* =========================
+   CLEAR FORM
+========================= */
 
 function clearForm() {
 
-    document.getElementById("id").value = "";
+  document.getElementById("id").value = "";
 
-    document.getElementById("name").value = "";
+  document.getElementById("name").value = "";
 
-    document.getElementById("hours").value = "";
+  document.getElementById("hours").value = "";
 
-    document.getElementById("rate").value = "";
+  document.getElementById("rate").value = "";
 }
-
-// =========================
-// INITIAL DISPLAY
-// =========================
-
-displayEmployees();
