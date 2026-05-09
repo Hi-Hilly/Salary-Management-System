@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Salary Management System</h1>
+
+        <!-- NAVIGATION -->
+        <div class="top-bar">
+            <button onclick="showUserDashboard()">User Dashboard</button>
+            <button onclick="adminLogin()">Admin Dashboard</button>
+        </div>
+
+        <!-- USER DASHBOARD -->
+        <div id="userDashboard">
+
+            <h2>User Dashboard</h2>
+
+            <div class="search-box">
+                <input type="number" id="searchId" placeholder="Search Employee ID">
+                <button onclick="searchEmployee()">Search Employee</button>
+            </div>
+
+            <div id="employeeList"></div>
+
+        </div>
+
+        <!-- ADMIN DASHBOARD -->
+        <div id="adminDashboard" class="hidden">
+
+            <h2>Admin Dashboard</h2>
+
+            <div class="form-box">
+
+                <input type="number" id="id" placeholder="Employee ID">
+
+                <input type="text" id="name" placeholder="Employee Name">
+
+                <input type="number" id="hours" placeholder="Hours Worked">
+
+                <input type="number" id="rate" placeholder="Hourly Rate">
+
+                <select id="role">
+                    <option value="STAFF">Staff</option>
+                    <option value="MANAGER">Manager</option>
+                    <option value="INTERN">Intern</option>
+                </select>
+
+                <button onclick="addEmployee()">Add Employee</button>
+
+            </div>
+
+            <div class="stats">
+                <button onclick="showStatistics()">Show Statistics</button>
+                <div id="statisticsResult"></div>
+            </div>
+
+            <h3>Manage Employees</h3>
+
+            <div id="adminEmployeeList"></div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
